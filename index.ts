@@ -8,7 +8,9 @@ const parser = new ArgumentParser({
 });
 
 parser.add_argument('-v', '--version', { action: "version", version: version })
-parser.add_argument('-i', '--input-files', { help: "The ipynb-file of which to convert the cells to slides", required: true, dest: 'input' })
+const group = parser.add_mutually_exclusive_group({ required: true });
+group.add_argument('-i', '--input-files', { help: "The ipynb-file of which to convert the cells to slides", dest: 'input', nargs: "+" })
+group.add_argument('-d', '--directory', { help: "The directory where all notebooks are stored" });
 
 const args_ = parser.parse_args();
 
@@ -35,10 +37,26 @@ function convertToSlides(notebook: Notebook) {
     return notebook;
 }
 
-function main() {
-    const notebook: Notebook = JSON.parse(fs.readFileSync(args_.input, { encoding: 'utf8' }));
+function convertNotebook(filepath: string) {
+    const notebook: Notebook = JSON.parse(fs.readFileSync(filepath, { encoding: 'utf8' }));
     const slide_notebook = convertToSlides(notebook);
-    fs.writeFileSync(path.parse(args_.input).name + ".slides.ipynb", JSON.stringify(slide_notebook))
+    const parsedPath = path.parse(filepath);
+    const outputPath = path.join(parsedPath.dir, parsedPath.name + ".slides.ipynb");
+    fs.writeFileSync(outputPath, JSON.stringify(slide_notebook))
+}
+
+function main() {
+    var inputFiles: string[] = [];
+    if (args_.input != undefined) {
+        inputFiles.concat(args_.input);
+    } else if (args_.directory) {
+        fs.readdirSync(args_.directory).forEach(item => {
+            if (item.endsWith(".ipynb")) {
+                inputFiles.push(path.join(args_.directory, item));
+            };
+        })
+    }
+    inputFiles.forEach(convertNotebook)
 }
 
 main()
