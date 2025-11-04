@@ -28,10 +28,16 @@ type Notebook = {
 
 function convertToSlides(notebook: Notebook) {
     notebook.cells.forEach((cell) => {
-        cell.metadata = {
-            slideshow: {
-                slide_type: "slide"
+        if (cell.metadata == undefined) {
+            cell.metadata = {
+                slideshow: {
+                    slide_type: "slide"
+                }
             }
+            return;
+        }
+        cell.metadata["slideshow"] = {
+            slide_type: "slide"
         }
     });
     return notebook;
