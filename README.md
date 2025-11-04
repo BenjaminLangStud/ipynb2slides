@@ -13,14 +13,15 @@ npm i argparse
 ## Running the script
 
 A help message is available with:
-```sh
-node index.js -h
-```
 
 > [!WARNING]
 > This tool probably has a few bugs and it is probably a good idea create a
 > backup of your ipynb files. Normally, this tool should not modify the original file,
 > but unforeseen things happen. They **ALWAYS** happen!
+
+```sh
+node index.js -h
+```
 
 ## Building from source
 
