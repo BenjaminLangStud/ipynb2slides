@@ -17,8 +17,10 @@ A help message is available with:
 node index.js -h
 ```
 
-> [!CAUTION]
-> This script is highly unoptimized and can probably break if not handled with care! You have been warned...
+> [!WARNING]
+> This tool probably has a few bugs and it is probably a good idea create a
+> backup of your ipynb files. Normally, this tool should not modify the original file,
+> but unforeseen things happen. They **ALWAYS** happen!
 
 ## Building from source
 
